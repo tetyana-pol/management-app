@@ -1,0 +1,4 @@
+npm run start:dev
+nest g module projects
+nest g controller projects
+nest g service projects
