@@ -56,18 +56,34 @@ export const ProjectDetailsPage = () => {
     );
   };
 
-  const handleStatusChange = (id, value) => {
-    const task = tasks.find((el) => el.id === id);
-    setProject((prev) => ({ ...prev, tasks }));
+  const handleStatusChange = async (id, value) => {
+    try {
+      // Update the task status on the server
+      await axios.put(`http://localhost:3000/tasks/${id}`, { status: value });
+      // Update the local state
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === id ? { ...task, status: value } : task
+        )
+      );
+    } catch (error) {
+      console.error("Error updating task status:", error);
+    }
   };
 
-  const handleAssignUser = (taskId, value) => {
-    tasks.map((el) => {
-      if (taskId === el.id) {
-        setTasks((prev) => ({ ...prev, status: value }));
-      }
-      return;
-    });
+  const handleAssignUser = async (id, value) => {
+    try {
+      // Update the task status on the server
+      await axios.put(`http://localhost:3000/tasks/${id}`, { userId: +value });
+      // Update the local state
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === id ? { ...task, userId: +value } : task
+        )
+      );
+    } catch (error) {
+      console.error("Error updating user assigment:", error);
+    }
   };
 
   console.log("project", project);
