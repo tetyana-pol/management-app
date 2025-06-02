@@ -59,7 +59,7 @@ export const ProjectDetailsPage = () => {
   const handleStatusChange = async (id, value) => {
     try {
       // Update the task status on the server
-      await axios.put(`http://localhost:3000/tasks/${id}`, { status: value });
+      await axios.patch(`http://localhost:3000/tasks/${id}`, { status: value });
       // Update the local state
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
@@ -74,7 +74,9 @@ export const ProjectDetailsPage = () => {
   const handleAssignUser = async (id, value) => {
     try {
       // Update the task status on the server
-      await axios.put(`http://localhost:3000/tasks/${id}`, { userId: +value });
+      await axios.patch(`http://localhost:3000/tasks/${id}`, {
+        userId: +value,
+      });
       // Update the local state
       setTasks((prevTasks) =>
         prevTasks.map((task) =>
