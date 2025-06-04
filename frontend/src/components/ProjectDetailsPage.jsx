@@ -103,7 +103,10 @@ export const ProjectDetailsPage = () => {
               <li key={task.id} className="task">
                 <div className="task-header">
                   <strong>{task.title}</strong>
-                  <strong>{task.description}</strong>
+                  <p>
+                    <strong>{task.description}</strong>
+                  </p>
+
                   <span>{task.status.replace("_", " ")}</span>
                 </div>
                 <small>Assigned to:</small>{" "}
@@ -128,23 +131,25 @@ export const ProjectDetailsPage = () => {
                       <option value="DONE">DONE</option>
                     </select>
                   </label>
-                  <label>
-                    Assign User:
-                    <select
-                      value={task.userId || ""}
-                      onChange={(e) =>
-                        handleAssignUser(task.id, e.target.value)
-                      }
-                      style={{ marginLeft: "0.5rem" }}
-                    >
-                      <option value="">Select user</option>
-                      {users?.map((user) => (
-                        <option key={user.id} value={user.id}>
-                          {user.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
+                  <p>
+                    <label>
+                      Assign User:
+                      <select
+                        value={task.userId || ""}
+                        onChange={(e) =>
+                          handleAssignUser(task.id, e.target.value)
+                        }
+                        style={{ marginLeft: "0.5rem" }}
+                      >
+                        <option value="">Select user</option>
+                        {users?.map((user) => (
+                          <option key={user.id} value={user.id}>
+                            {user.name}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </p>
                 </div>
               </li>
             ))}
