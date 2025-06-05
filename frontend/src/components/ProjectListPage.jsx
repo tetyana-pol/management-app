@@ -1,13 +1,15 @@
-import { useState, useEffect } from "react";
-import { getAllProjects } from "../services/userService";
 import { NavLink } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
 export const ProjectListPage = () => {
-  const [projects, setProjects] = useState(null);
-
-  useEffect(() => {
-    getAllProjects().then((res) => setProjects(res.data));
-  }, []);
+  const { data: projects } = useQuery({
+    queryKey: ["projects"],
+    queryFn: async () =>
+      await axios.get("http://localhost:3000/projects").then((res) => {
+        return res.data;
+      }),
+  });
 
   return (
     <div className="container">
