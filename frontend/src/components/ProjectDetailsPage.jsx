@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { addTask } from "../services/userService";
 
 export const ProjectDetailsPage = () => {
-  const [tasks, setTasks] = useState(null);
   const [showAddTaskForm, setShowAddTaskForm] = useState(false);
   const [newTask, setNewTask] = useState({
     title: "",
@@ -14,6 +13,8 @@ export const ProjectDetailsPage = () => {
   });
 
   const { projectId } = useParams();
+
+  const navigate = useNavigate();
 
   const { data: project } = useQuery({
     queryKey: ["project", projectId],
@@ -25,15 +26,14 @@ export const ProjectDetailsPage = () => {
         }),
   });
 
-  const { data } = useQuery({
+  const { data: tasks } = useQuery({
     queryKey: ["tasks", projectId],
     queryFn: async () =>
       await axios
         .get(`http://localhost:3000/tasks/project/${projectId}`)
         .then((res) => {
           return res.data;
-        })
-        .then((res) => setTasks(res)),
+        }),
   });
 
   const { data: users } = useQuery({
@@ -58,14 +58,7 @@ export const ProjectDetailsPage = () => {
 
   const handleStatusChange = async (id, value) => {
     try {
-      // Update the task status on the server
       await axios.patch(`http://localhost:3000/tasks/${id}`, { status: value });
-      // Update the local state
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === id ? { ...task, status: value } : task
-        )
-      );
     } catch (error) {
       console.error("Error updating task status:", error);
     }
@@ -73,16 +66,9 @@ export const ProjectDetailsPage = () => {
 
   const handleAssignUser = async (id, value) => {
     try {
-      // Update the task status on the server
-      await axios.patch(`http://localhost:3000/tasks/user/${id}`, {
+      await axios.patch(`http://localhost:3000/tasks/${id}/user`, {
         userId: +value,
       });
-      // Update the local state
-      setTasks((prevTasks) =>
-        prevTasks.map((task) =>
-          task.id === id ? { ...task, userId: +value } : task
-        )
-      );
     } catch (error) {
       console.error("Error updating user assigment:", error);
     }
@@ -90,6 +76,11 @@ export const ProjectDetailsPage = () => {
 
   return (
     <div className="container">
+      <div className="details">
+        <button type="button" onClick={() => navigate("/")}>
+          Home
+        </button>
+      </div>
       <h3>Details</h3>
 
       <div>Project description: {project?.description}</div>

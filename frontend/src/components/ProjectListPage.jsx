@@ -1,8 +1,10 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 export const ProjectListPage = () => {
+  const navigate = useNavigate();
+
   const { data: projects } = useQuery({
     queryKey: ["projects"],
     queryFn: async () =>
@@ -13,6 +15,11 @@ export const ProjectListPage = () => {
 
   return (
     <div className="container">
+      <div className="details">
+        <button type="button" onClick={() => navigate("/create-project")}>
+          New project
+        </button>
+      </div>
       <h3>All projects</h3>
       <ul>
         {projects?.map((el) => (

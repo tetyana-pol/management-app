@@ -1,13 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { ChangeTaskUserDto } from './dto/change-taskuser.dto';
 import { NotFoundException } from '@nestjs/common';
 import { Task } from 'src/entities/task.entity';
 import { User } from 'src/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class TasksService {
@@ -29,6 +27,7 @@ export class TasksService {
   async findByProject(projectId: number) {
     const task = await this.taskRepo.find({
       where: { project: { id: projectId } },
+      relations: ['user'],
     });
 
     if (!task) throw new NotFoundException();
