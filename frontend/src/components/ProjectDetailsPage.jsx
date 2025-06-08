@@ -74,7 +74,7 @@ export const ProjectDetailsPage = () => {
   const handleAssignUser = async (id, value) => {
     try {
       // Update the task status on the server
-      await axios.patch(`http://localhost:3000/tasks/${id}`, {
+      await axios.patch(`http://localhost:3000/tasks/user/${id}`, {
         userId: +value,
       });
       // Update the local state
@@ -87,8 +87,6 @@ export const ProjectDetailsPage = () => {
       console.error("Error updating user assigment:", error);
     }
   };
-
-  console.log("project", project);
 
   return (
     <div className="container">
@@ -109,11 +107,12 @@ export const ProjectDetailsPage = () => {
 
                   <span>{task.status.replace("_", " ")}</span>
                 </div>
-                <small>Assigned to:</small>{" "}
+                <small>Assigned to:</small>
                 {users && (
                   <small>
-                    {users.find((u) => u.id === task.userId)?.name ||
-                      "Unassigned"}
+                    {"  "}
+                    {users.find((u) => u.id == task.user?.id)?.name ||
+                      "  Unassigned"}
                   </small>
                 )}
                 <div className="task-actions">
