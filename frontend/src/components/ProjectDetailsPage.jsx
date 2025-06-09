@@ -57,6 +57,8 @@ export const ProjectDetailsPage = () => {
     }
   };
 
+  console.log("tasks", tasks);
+
   return (
     <div className="container">
       <div className="details">
@@ -138,7 +140,12 @@ export const ProjectDetailsPage = () => {
           Add task
         </button>
       )}
-      {showAddTaskForm && <CreateTaskForm projectId={+projectId} />}
+      {showAddTaskForm && (
+        <CreateTaskForm
+          projectId={+projectId}
+          setShowAddTaskForm={setShowAddTaskForm}
+        />
+      )}
     </div>
   );
 };

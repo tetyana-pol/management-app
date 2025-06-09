@@ -3,6 +3,7 @@ import { addProject } from "../services/userService";
 import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 
 const schema = z.object({
   title: z.string().min(1, "Name is required"),
@@ -14,6 +15,10 @@ type FormFields = z.infer<typeof schema>;
 export const CreateProjectForm = () => {
   const navigate = useNavigate();
 
+  const { mutateAsync: addProjectMutation } = useMutation({
+    mutationFn: addProject,
+  });
+
   const {
     register,
     handleSubmit,
@@ -23,8 +28,7 @@ export const CreateProjectForm = () => {
   type SchemaType = z.infer<typeof schema>;
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(data);
-    return await addProject(data);
+    return await addProjectMutation(data).then(() => navigate("/"));
   };
 
   return (

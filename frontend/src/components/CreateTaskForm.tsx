@@ -2,6 +2,11 @@ import { z } from "zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { addTask } from "../services/userService";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 
 const schema = z.object({
   title: z.string().min(1, "Name is required"),
@@ -10,11 +15,39 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
+/*type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+type Task = {
+  description: string;
+  id: number;
+  status: string;
+  title: string;
+  user: User;
+}; */
+
 interface Props {
   projectId: number;
+  setShowAddTaskForm: (arg: boolean) => {};
 }
 
-export const CreateTaskForm: React.FC<Props> = ({ projectId }) => {
+export const CreateTaskForm: React.FC<Props> = ({
+  projectId,
+  setShowAddTaskForm,
+}) => {
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: addTaskMutation } = useMutation({
+    mutationFn: addTask,
+    onSuccess: () => {
+      setShowAddTaskForm(false);
+      //  queryClient.invalidateQueries(["tasks", projectId]);
+    },
+  });
+
   const {
     register,
     handleSubmit,
@@ -24,8 +57,7 @@ export const CreateTaskForm: React.FC<Props> = ({ projectId }) => {
   type SchemaType = z.infer<typeof schema>;
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
-    console.log(data);
-    return await addTask({ ...data, status: "TODO", projectId });
+    return await addTaskMutation({ ...data, status: "TODO", projectId });
   };
 
   return (

@@ -13,7 +13,6 @@ import { UsersService } from '../users/users.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { ChangeTaskUserDto } from './dto/change-taskuser.dto';
-import { Task } from 'src/entities/task.entity';
 
 @Controller('tasks')
 export class TasksController {
