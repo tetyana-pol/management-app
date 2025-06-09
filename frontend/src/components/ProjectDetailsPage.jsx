@@ -2,15 +2,10 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
-import { addTask } from "../services/userService";
+import { CreateTaskForm } from "./CreateTaskForm";
 
 export const ProjectDetailsPage = () => {
   const [showAddTaskForm, setShowAddTaskForm] = useState(false);
-  const [newTask, setNewTask] = useState({
-    title: "",
-    description: "",
-    status: "TODO",
-  });
 
   const { projectId } = useParams();
 
@@ -43,18 +38,6 @@ export const ProjectDetailsPage = () => {
         return res.data;
       }),
   });
-
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setNewTask((prevFormData) => ({ ...prevFormData, [name]: value }));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    addTask({ ...newTask, projectId: +projectId }).then(
-      setShowAddTaskForm(false)
-    );
-  };
 
   const handleStatusChange = async (id, value) => {
     try {
@@ -155,23 +138,7 @@ export const ProjectDetailsPage = () => {
           Add task
         </button>
       )}
-      {showAddTaskForm && (
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="title"
-            value={newTask.title}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="description"
-            value={newTask.description}
-            onChange={handleChange}
-          />
-          <button>Create new task</button>
-        </form>
-      )}
+      {showAddTaskForm && <CreateTaskForm projectId={+projectId} />}
     </div>
   );
 };
