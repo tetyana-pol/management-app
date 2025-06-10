@@ -15,20 +15,6 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-/*type User = {
-  id: number;
-  name: string;
-  email: string;
-};
-
-type Task = {
-  description: string;
-  id: number;
-  status: string;
-  title: string;
-  user: User;
-}; */
-
 interface Props {
   projectId: number;
   setShowAddTaskForm: (arg: boolean) => {};
@@ -44,7 +30,7 @@ export const CreateTaskForm: React.FC<Props> = ({
     mutationFn: addTask,
     onSuccess: () => {
       setShowAddTaskForm(false);
-      //  queryClient.invalidateQueries(["tasks", projectId]);
+      queryClient.invalidateQueries();
     },
   });
 
